@@ -1,0 +1,8 @@
+library(tidyverse)
+library(scp)
+library(scpdata)
+library(patchwork)
+library(ensembldb)
+library(EnsDb.Hsapiens.v86)
+library(bluster)
+library(scater)
