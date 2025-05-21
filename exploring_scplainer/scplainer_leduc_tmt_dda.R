@@ -9,6 +9,8 @@ library(scater)
 
 ### We follow the workflow as documented here:
 ### https://uclouvain-cbio.github.io/SCP.replication/articles/scplainer_leduc2022.html
+### with some extra details sprinkled in from here:
+### https://uclouvain-cbio.github.io/scp/articles/scp_data_modelling.html
 
 # The data here is already preprocessed (see documentation).
 # This involves:
@@ -80,4 +82,32 @@ f <- ~ 1 + ## intercept
 
 # Please download the fitted model from: http://u.pc.cd/rUN
 sce <- readr::read_rds("sce_fitted.RDS")
+
+# You can always retrieve the formula that was used to fit model with:
+
+scpModelFormula(sce)
+
+# The data that is modelled by each variable are contained in the so-called effect matrices:
+
+(effects <- scpModelEffects(sce))
+
+# We can investigate the size of these effect matrices with dim()
+# We get:
+# - 16 670 rows (peptides)
+# - 1 656 columns (cells)
+
+dim(effects$MedianIntensity)
+
+# These dimensions are the same as our model input data:
+
+dim((model_input <- scpModelInput(sce)))
+
+# However, they differ from our original data due to peptide filtering that is done
+# before the model is fitted (?filtering peptides that have too many missing values to be modelled)
+
+dim(sce)
+
+# Data that could not be modelled by our variables is captured in the residual matrix.
+
+dim((residual <- scpModelResiduals(sce)))
 
